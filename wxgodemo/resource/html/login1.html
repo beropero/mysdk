@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录页面</title>
+    <style>
+        #qr-code {
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="qr-code-container">
+        <img id="qr-code" src="#" alt="QR Code">
+    </div>
+    <h1 id="login-status"></h1>
+    <h3 id="login-user"></h3>
+    <script>
+        // 请求后端获取二维码图片地址
+        function getQRCode() {
+            fetch('http://39.101.78.10/wechat/getloginqr') // 假设'/get_qr_code'是后端提供的接口地址
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.qrUrl)
+                document.getElementById('qr-code').src = data.qrUrl;
+                // 开始轮询检查登录状态
+                // 根据问号分割URL，获取问号后面的部分
+                var queryString = data.qrUrl.split('?')[1];
+                // 根据等号分割查询字符串，获取ticket参数的值
+                var ticket = queryString.split('=')[1];
+                console.log(ticket);
+                checkLoginStatus(ticket);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // 轮询检查登录状态
+        function checkLoginStatus(ticket) {
+            url = 'http://39.101.78.10/wechat/checklogin?ticket='+ ticket
+            console.log(url)
+            var checkLoginInterval = setInterval(() => {
+                fetch(url) // 假设'/check_login_status'是后端提供的接口地址
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    if (data.login) {
+                        document.getElementById('login-status').innerText = '登录成功';
+                        document.getElementById('login-user').innerText = 'Openid: ' + data.openid; 
+                        clearInterval(checkLoginInterval); // 登录成功后停止轮询
+                        // 登录成功后跳转到另外一个页面
+                        //window.location.href = 'http://39.101.78.10/hello'; 
+                    } 
+                })
+                .catch(error => console.error('Error:', error));
+            }, 2000); // 每隔2秒轮询一次
+        }
+
+        // 页面加载完成后立即获取二维码
+        window.onload = function() {
+            getQRCode();
+        };
+    </script>
+</body>
+</html>
