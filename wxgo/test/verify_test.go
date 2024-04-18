@@ -1,4 +1,4 @@
-package wechat_test
+package wxgo_test
 
 import (
 

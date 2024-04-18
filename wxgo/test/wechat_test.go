@@ -1,8 +1,9 @@
-package wechat_test
+package wxgo_test
 
 import (
-	"mysdk/wxgo"
 	"testing"
+
+	"github.com/beropero/mysdk/wxgo"
 )
 
 

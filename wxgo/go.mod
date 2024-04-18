@@ -1,4 +1,4 @@
-module mysdk/wxgo
+module github.com/beropero/mysdk/wxgo
 
 go 1.18
 
