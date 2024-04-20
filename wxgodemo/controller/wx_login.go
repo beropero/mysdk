@@ -44,7 +44,7 @@ func GetAuthQrUrl(ctx *gin.Context) {
 	ticket := wxgo.GenerateRandomTicket(20)
 	// 生成授权地址
 	redirect_url := "http://39.101.78.10/wechat/accessusercode" // 微信授权后重定向地址,用于接收用户code
-	scope := "snsapi_userinfo"                                  //授权权限
+	scope := "snsapi_base"                                  //授权权限
 	oauthUrl := wechat.Wx.GetOauth2CodeUrl(redirect_url, scope, ticket)
 	// 将授权地址生成QR码
 	savePath := "./resource/image"
@@ -72,5 +72,5 @@ func AccessUserCode(ctx *gin.Context) {
 	// 将ticket和openid放入redis
 	redis.RedisClient.Set(ticke, uInfo.OpenId, 60*time.Second)
 	// 重定向到成功/失败页面
-	ctx.Redirect(http.StatusTemporaryRedirect,"http://39.101.78.10/static/html/loginsucceed.html")
+	ctx.Redirect(http.StatusTemporaryRedirect, "http://39.101.78.10/static/html/loginsucceed.html")
 }

@@ -27,12 +27,7 @@
                 console.log(data.qrUrl)
                 document.getElementById('qr-code').src = data.qrUrl;
                 // 开始轮询检查登录状态
-                // 根据问号分割URL，获取问号后面的部分
-                var queryString = data.qrUrl.split('?')[1];
-                // 根据等号分割查询字符串，获取ticket参数的值
-                var ticket = queryString.split('=')[1];
-                console.log(ticket);
-                checkLoginStatus(ticket);
+                checkLoginStatus(data.ticket);
             })
             .catch(error => console.error('Error:', error));
         }
@@ -50,8 +45,6 @@
                         document.getElementById('login-status').innerText = '登录成功';
                         document.getElementById('login-user').innerText = 'Openid: ' + data.openid; 
                         clearInterval(checkLoginInterval); // 登录成功后停止轮询
-                        // 登录成功后跳转到另外一个页面
-                        //window.location.href = 'http://39.101.78.10/hello'; 
                     } 
                 })
                 .catch(error => console.error('Error:', error));

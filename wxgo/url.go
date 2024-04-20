@@ -44,6 +44,7 @@ func (w *Wechat) GetUserInfoUrl(at UAT) string {
 }
 
 func (w *Wechat) GetQrImageUrl(ticket string) string {
+	ticket = url.QueryEscape(ticket)
 	url := fmt.Sprintf(ReqUrl.QRImgUrl,ticket)
 	return url
 }
